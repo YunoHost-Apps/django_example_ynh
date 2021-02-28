@@ -1,13 +1,15 @@
-from axes.models import AccessAttempt, AccessLog
+from axes.models import AccessLog
 from bx_py_utils.test_utils.html_assertion import HtmlAssertionMixin
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import override_settings
 from django.test.testcases import TestCase
+from django.urls import NoReverseMatch
 from django.urls.base import reverse
-
 from django_ynh.test_utils import generate_basic_auth
 from django_ynh.views import request_media_debug_view
+
+import inventory
 
 
 @override_settings(DEBUG=False)
@@ -23,13 +25,22 @@ class DjangoYnhTestCase(HtmlAssertionMixin, TestCase):
 
         assert str(settings.FINAL_HOME_PATH).endswith('/local_test/opt_yunohost')
         assert str(settings.FINAL_WWW_PATH).endswith('/local_test/var_www')
-        assert str(settings.LOG_FILE).endswith('/local_test/var_log_django_ynh.log')
+        assert str(settings.LOG_FILE).endswith('/local_test/var_log_django_example_ynh.log')
 
         assert settings.ROOT_URLCONF == 'urls'
 
     def test_urls(self):
         assert reverse('admin:index') == '/app_path/'
-        assert reverse(request_media_debug_view) == '/app_path/debug/'
+
+        # The django_ynh debug view should not be avaiable:
+        with self.assertRaises(NoReverseMatch):
+            reverse(request_media_debug_view)
+
+        # Serve user uploads via django_tools.serve_media_app:
+        assert settings.MEDIA_URL == '/app_path/media/'
+        assert reverse('serve_media_app:serve-media', kwargs={'user_token': 'token', 'path': 'foo/bar/'}) == (
+            '/app_path/media/token/foo/bar/'
+        )
 
     def test_auth(self):
         response = self.client.get('/app_path/')
@@ -55,7 +66,11 @@ class DjangoYnhTestCase(HtmlAssertionMixin, TestCase):
         assert user.is_superuser is False
 
         self.assert_html_parts(
-            response, parts=('<title>Site administration | Django site admin</title>', '<strong>test</strong>')
+            response,
+            parts=(
+                f'<title>Site administration | PyInventory v{inventory.__version__}</title>',
+                '<strong>test</strong>',
+            ),
         )
 
     def test_wrong_auth_user(self):

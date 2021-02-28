@@ -113,7 +113,7 @@ fi
 #=================================================
 # MODIFY SETTINGS
 #=================================================
-ynh_script_progression --message="Modify django_ynh's config file..."
+ynh_script_progression --message="Modify PyInventory's config file..."
 
 # save old settings file
 settings="$final_path/settings.py"

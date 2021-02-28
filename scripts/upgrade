@@ -80,7 +80,7 @@ ynh_system_user_create --username="$app" --home_dir="$final_path" --use_shell
 #=================================================
 ynh_script_progression --message="Configuring a systemd service..."
 
-ynh_add_systemd_config --service="$app" --template="django_ynh.service"
+ynh_add_systemd_config --service="$app" --template="django_example_ynh.service"
 
 #=================================================
 # UPGRADE VENV
@@ -98,7 +98,6 @@ chown -R "$app" "$final_path"
 	set -o nounset
 	ynh_exec_as $app $final_path/venv/bin/pip install --upgrade pip
 	ynh_exec_as $app $final_path/venv/bin/pip install -r "$final_path/requirements.txt"
-	ynh_exec_as $app $final_path/venv/bin/pip install --upgrade "$pip_install_string"
 )
 
 #=================================================
@@ -150,30 +149,29 @@ cp ../conf/wsgi.py "$final_path/wsgi.py"
 
 touch "$final_path/local_settings.py"
 
-
 #=================================================
-# MIGRATE / COLLECTSTATIC / CREATE SUPERUSER
+# MIGRATE PYINVENTORY
 #=================================================
-ynh_script_progression --message="migrate/collectstatic/create superuser..." --weight=10
+ynh_script_progression --message="migrate/collectstatic/createadmin..." --weight=10
 
 (
-    set +o nounset
-    source "${final_path}/venv/bin/activate"
-    set -o nounset
-    cd "${final_path}"
+	set +o nounset
+	source "${final_path}/venv/bin/activate"
+	set -o nounset
+	cd "${final_path}"
 
-    # Just for debugging:
-    ./manage.py diffsettings
+  # Just for debugging:
+  ./manage.py diffsettings
 
-    ./manage.py migrate --no-input
-    ./manage.py collectstatic --no-input
+	./manage.py migrate --no-input
+	./manage.py collectstatic --no-input
 
-    # Create/update Django superuser (set unusable password, because auth done via SSOwat):
-    ./manage.py create_superuser --username="$admin" --email="$admin_mail"
+	# Create/update Django superuser (set unusable password, because auth done via SSOwat):
+	./manage.py create_superuser --username="$admin" --email="$admin_mail"
 
-    # Check the configuration
-    # This may fail in some cases with errors, etc., but the app works and the user can fix issues later.
-    ./manage.py check --deploy || true
+	# Check the configuration
+	# This may fail in some cases with errors, etc., but the app works and the user can fix issues later.
+	./manage.py check --deploy || true
 )
 
 #=================================================
@@ -203,9 +201,9 @@ chown -R "$app" "$public_path"
 chown -R "$app" "$final_path"
 
 #=================================================
-# Start django_ynh via systemd
+# Start django_example_ynh via systemd
 #=================================================
-ynh_script_progression --message="Starting django_ynh's services..." --weight=5
+ynh_script_progression --message="Starting PyInventory's services..." --weight=5
 
 ynh_systemd_action --service_name="$app" --action="start"
 

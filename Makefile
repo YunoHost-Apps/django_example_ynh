@@ -31,7 +31,7 @@ update: install-poetry  ## update the sources and installation and generate "con
 lint: ## Run code formatters and linter
 	poetry run flynt --fail-on-change --line_length=${MAX_LINE_LENGTH} .
 	poetry run isort --check-only .
-	poetry run flake8 django_ynh
+	poetry run flake8 .
 
 fix-code-style: ## Fix code formatting
 	poetry run flynt --line_length=${MAX_LINE_LENGTH} .
@@ -46,9 +46,6 @@ tox: check-poetry ## Run pytest via tox with all environments
 
 pytest: install  ## Run pytest
 	poetry run python3 ./run_pytest.py
-
-publish: ## Release new version to PyPi
-	poetry run python3 ./publish.py
 
 local-test: install  ## Run local_test.py to run the project locally
 	poetry run python3 ./local_test.py

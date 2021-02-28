@@ -34,7 +34,7 @@ then
 fi
 
 #=================================================
-# STOP django_ynh'S SERVICES
+# STOP PYINVENTORY'S SERVICES
 #=================================================
 ynh_script_progression --message="Stopping and removing systemd services..." --weight=5
 

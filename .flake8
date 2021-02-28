@@ -2,6 +2,6 @@
 # Move to pyproject.toml after: https://gitlab.com/pycqa/flake8/-/issues/428
 #
 [flake8]
-exclude = .pytest_cache, .tox, dist, htmlcov, */migrations/*
-#ignore = E402
+exclude = .pytest_cache, .tox, dist, htmlcov, local_test
+ignore = F405
 max-line-length = 119

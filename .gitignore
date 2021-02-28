@@ -3,11 +3,8 @@
 !.editorconfig
 !.flake8
 !.gitignore
-coverage.xml
 __pycache__
 secret.txt
-/htmlcov/
 /local_test/
-/dist/
-/poetry.lock
-*.log
+/coverage.xml
+/htmlcov/

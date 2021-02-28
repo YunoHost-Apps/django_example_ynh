@@ -1,28 +1,15 @@
 [tool.poetry]
-name = "django_ynh"
-version = "0.1.5"
-description = "Glue code to package django projects as yunohost apps."
+name = "django_example_ynh"
+version = "v0.2.0.alpha0"
+description = "Demo YunoHost Application to demonstrate the integration of a Django project under YunoHost."
 authors = ["JensDiemer <git@jensdiemer.de>"]
 license = "GPL"
-readme = "README.md"
-homepage = "https://github.com/YunoHost-Apps/django_ynh"
-packages = [
-    { include = "django_ynh" },
-]
-
 
 [tool.poetry.dependencies]
 python = ">=3.7,<4.0.0"
-django = "*"
-# The follogin extra packages are used for install "django_ynh" as YunoHost app:
-gunicorn = { version = "*", optional = true }
-psycopg2-binary = { version = "*", optional = true }
-django-redis = { version = "*", optional = true }
-django-axes = { version = "*", optional = true }  # https://github.com/jazzband/django-axes
+django_yunohost_integration = {version = "*", extras = ["ynh"]}
 
 [tool.poetry.dev-dependencies]
-django-axes = "*"  # https://github.com/jazzband/django-axes
-poetry-publish = "*"  # https://github.com/jedie/poetry-publish
 bx_py_utils = "*"
 tox = "*"
 pytest = "*"
@@ -35,23 +22,20 @@ flynt = "*"
 black = "*"
 pyupgrade = "*"
 
-[tool.poetry.extras]
-ynh = ["gunicorn", "psycopg2-binary", "django-redis", "django-axes"]  # install as YunoHost app
-
-
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
 
 [tool.isort]
 # https://pycqa.github.io/isort/docs/configuration/config_files/#pyprojecttoml-preferred-format
 atomic=true
 line_length=120
 case_sensitive=false
-skip_glob=["*/htmlcov/*","*/migrations/*","*/volumes/*"]
+skip_glob=["*/htmlcov/*","*/migrations/*"]
 multi_line_output=3
 include_trailing_comma=true
-known_first_party=["django_ynh","django_ynh_project","django_ynh_tests"]
+known_first_party=[]
 no_lines_before="LOCALFOLDER"
 default_section="THIRDPARTY"
 sections=["FUTURE","STDLIB","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
@@ -61,7 +45,7 @@ lines_after_imports=2
 [tool.pytest.ini_options]
 # https://docs.pytest.org/en/latest/customize.html#pyproject-toml
 minversion = "6.0"
-norecursedirs = ".* .git __pycache__ conf coverage* dist htmlcov volumes"
+norecursedirs = ".* .git __pycache__ conf coverage* dist htmlcov"
 # sometimes helpfull "addopts" arguments:
 #    -vv
 #    --verbose
@@ -96,7 +80,7 @@ skip_missing_interpreters = True
 
 [testenv]
 passenv = *
-whitelist_externals = pytest
+whitelist_externals = make
 commands =
-    pytest --workers auto --tests-per-worker 1 --pyargs django_ynh django_ynh_project
+    make pytest
 """

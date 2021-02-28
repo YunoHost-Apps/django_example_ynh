@@ -114,13 +114,12 @@ chown -R "$app" "$final_path"
 	set -o nounset
 	ynh_exec_as $app $final_path/venv/bin/pip install --upgrade pip
 	ynh_exec_as $app $final_path/venv/bin/pip install -r "$final_path/requirements.txt"
-	ynh_exec_as $app $final_path/venv/bin/pip install --upgrade "$pip_install_string"
 )
 
 #=================================================
 # copy config files
 # ================================================
-ynh_script_progression --message="Create django_ynh configuration file..."
+ynh_script_progression --message="Create project configuration files..."
 
 gunicorn_conf="$final_path/gunicorn.conf.py"
 cp "../conf/gunicorn.conf.py" "$gunicorn_conf"
@@ -158,11 +157,10 @@ cp ../conf/wsgi.py "$final_path/wsgi.py"
 
 touch "$final_path/local_settings.py"
 
-
 #=================================================
-# MIGRATE / COLLECTSTATIC / CREATE SUPERUSER
+# MIGRATE / COLLECTSTATIC / CREATEADMIN
 #=================================================
-ynh_script_progression --message="migrate/collectstatic/create superuser..." --weight=10
+ynh_script_progression --message="migrate/collectstatic/createadmin..." --weight=10
 
 (
     set +o nounset
@@ -176,8 +174,8 @@ ynh_script_progression --message="migrate/collectstatic/create superuser..." --w
     ./manage.py migrate --no-input
     ./manage.py collectstatic --no-input
 
-    # Create/update Django superuser (set unusable password, because auth done via SSOwat):
-    ./manage.py create_superuser --username="$admin" --email="$admin_mail"
+	# Create/update Django superuser (set unusable password, because auth done via SSOwat):
+	./manage.py create_superuser --username="$admin" --email="$admin_mail"
 
     # Check the configuration
     # This may fail in some cases with errors, etc., but the app works and the user can fix issues later.
@@ -216,7 +214,7 @@ chown -R "$app" "$final_path"
 ynh_script_progression --message="Configuring a systemd service..."
 
 # https://github.com/YunoHost/yunohost/blob/dev/data/helpers.d/systemd
-ynh_add_systemd_config --service="$app" --template="django_ynh.service"
+ynh_add_systemd_config --service="$app" --template="django_example_ynh.service"
 
 #=================================================
 # SETUP SSOWAT
@@ -232,9 +230,9 @@ then
 fi
 
 #=================================================
-# Start django_ynh via systemd
+# Start django_example_ynh via systemd
 #=================================================
-ynh_script_progression --message="Starting django_ynh's services..." --weight=5
+ynh_script_progression --message="Starting PyInventory's services..." --weight=5
 
 ynh_systemd_action --service_name="$app" --action="start"
 

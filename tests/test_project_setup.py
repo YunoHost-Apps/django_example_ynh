@@ -3,10 +3,10 @@ import shutil
 import subprocess
 from pathlib import Path
 
-import django_ynh
+import django_exyunohost_integration
 
 
-PACKAGE_ROOT = Path(django_ynh.__file__).parent.parent
+PACKAGE_ROOT = Path(__file__).parent.parent
 
 
 def assert_file_contains_string(file_path, string):
@@ -17,29 +17,15 @@ def assert_file_contains_string(file_path, string):
     raise AssertionError(f'File {file_path} does not contain {string!r} !')
 
 
-def test_version(package_root=None, version=None):
-    if package_root is None:
-        package_root = PACKAGE_ROOT
+def test_version():
+    version = inventory.__version__
 
-    if version is None:
-        version = django_ynh.__version__
-
-    if 'dev' not in version and 'rc' not in version:
-        version_string = f'v{version}'
-
-        assert_file_contains_string(file_path=Path(package_root, 'README.md'), string=version_string)
-
-    assert_file_contains_string(file_path=Path(package_root, 'pyproject.toml'), string=f'version = "{version}"')
-    assert_file_contains_string(file_path=Path(package_root, 'manifest.json'), string=f'"version": "{version}~ynh')
-    assert_file_contains_string(
-        file_path=Path(package_root, 'scripts', '_common.sh'), string=f'"django_ynh[ynh]=={version}"'
-    )
+    assert_file_contains_string(file_path=Path(PACKAGE_ROOT, 'pyproject.toml'), string=f'version = "{version}~ynh')
+    assert_file_contains_string(file_path=Path(PACKAGE_ROOT, 'pyproject.toml'), string=f'django_example_ynh = "=={version}"')
+    assert_file_contains_string(file_path=Path(PACKAGE_ROOT, 'manifest.json'), string=f'"version": "{version}~ynh')
 
 
-def test_poetry_check(package_root=None):
-    if package_root is None:
-        package_root = PACKAGE_ROOT
-
+def test_poetry_check():
     poerty_bin = shutil.which('poetry')
 
     output = subprocess.check_output(
@@ -47,7 +33,7 @@ def test_poetry_check(package_root=None):
         universal_newlines=True,
         env=os.environ,
         stderr=subprocess.STDOUT,
-        cwd=str(package_root),
+        cwd=str(PACKAGE_ROOT),
     )
     print(output)
     assert output == 'All set!\n'

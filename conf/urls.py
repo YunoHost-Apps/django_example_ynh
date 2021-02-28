@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path
 
-from django_ynh.views import request_media_debug_view
+from django_yunohost_integration.views import request_media_debug_view
 
 
 # settings.PATH_URL is the $YNH_APP_ARG_PATH

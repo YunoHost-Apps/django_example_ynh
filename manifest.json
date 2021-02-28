@@ -1,16 +1,16 @@
 {
-	"name": "django_ynh",
-	"id": "django_ynh",
+	"name": "Django Example",
+	"id": "django_example_ynh",
 	"packaging_format": 1,
 	"description": {
-		"en": "Glue code to package django projects as yunohost apps."
+		"en": "Demo YunoHost Application to demonstrate the integration of a Django project under YunoHost."
 	},
-	"version": "0.1.5~ynh1",
-	"url": "https://github.com/jedie/django_ynh",
+	"version": "v0.2.0.alpha0~ynh1",
+	"url": "https://github.com/YunoHost-Apps/django_example_ynh",
 	"license": "GPL-3.0",
 	"maintainer": {
 		"name": "Jens Diemer",
-		"email": "django_ynh@jensdiemer.de"
+		"email": "django_example_ynh@jensdiemer.de"
 	},
 	"previous_maintainers": [],
 	"requirements": {
@@ -26,8 +26,8 @@
 				"name": "domain",
 				"type": "domain",
 				"ask": {
-					"en": "Choose a domain for django_ynh",
-					"fr": "Choisissez un domaine pour django_ynh"
+					"en": "Choose a domain for PyInventory",
+					"fr": "Choisissez un domaine pour PyInventory"
 				},
 				"example": "domain.org"
 			},
@@ -35,18 +35,18 @@
 				"name": "path",
 				"type": "path",
 				"ask": {
-				    "en": "Choose a path for django_ynh",
-				    "fr": "Choisissez un chemin pour django_ynh"
+				    "en": "Choose a path for PyInventory",
+				    "fr": "Choisissez un chemin pour PyInventory"
 				},
-				"example": "/django_ynh",
-				"default": "/django_ynh"
+				"example": "/django_example_ynh",
+				"default": "/django_example_ynh"
 			},
 			{
 				"name": "admin",
 				"type": "user",
 				"ask": {
-				    "en": "Choose an admin user for django_ynh",
-				    "fr": "Choisissez l'administrateur pour django_ynh"
+				    "en": "Choose an admin user for PyInventory",
+				    "fr": "Choisissez l'administrateur pour PyInventory"
 				},
 				"example": "johndoe"
 			},
@@ -54,8 +54,8 @@
 				"name": "is_public",
 				"type": "boolean",
 				"ask": {
-					"en": "Should django_ynh be public accessible?",
-					"fr": "django_ynh doit-il être accessible au public ?"
+					"en": "Should PyInventory be public accessible?",
+					"fr": "PyInventory doit-il être accessible au public ?"
 				},
 				"help": {
 					"en": "Any YunoHost user and anonymous people from the web will be able to access the application",

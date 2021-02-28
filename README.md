@@ -1,16 +1,9 @@
-# django_ynh
+# django_example_ynh
 
+Demo [YunoHost Application](https://install-app.yunohost.org/?app=django_example_ynh) to demonstrate the integration of a Django project under YunoHost.
 
-Glue code to package django projects as yunohost apps.
-
-This repository is:
-
-* The Python package [django-ynh](https://pypi.org/project/django-ynh/) with helpers for integrate a Django project as YunoHost package
-* A example [YunoHost Application](https://install-app.yunohost.org/?app=django_ynh) that can be installed
-
-
-[![Integration level](https://dash.yunohost.org/integration/django_ynh.svg)](https://dash.yunohost.org/appci/app/django_ynh) ![](https://ci-apps.yunohost.org/ci/badges/django_ynh.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/django_ynh.maintain.svg)
-[![Install django_ynh with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=django_ynh)
+[![Integration level](https://dash.yunohost.org/integration/django_example_ynh.svg)](https://dash.yunohost.org/appci/app/django_example_ynh) ![](https://ci-apps.yunohost.org/ci/badges/django_example_ynh.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/django_example_ynh.maintain.svg)
+[![Install django_example_ynh with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=django_example_ynh)
 
 
 Pull requests welcome ;)
@@ -92,9 +85,9 @@ and urls made for YunoHost installation.
 
 e.g.:
 ```bash
-~$ git clone https://github.com/YunoHost-Apps/django_ynh.git
+~$ git clone https://github.com/YunoHost-Apps/django_example_ynh.git
 ~$ cd django_ynh/
-~/django_ynh$ make
+~/django_example_ynh$ make
 install-poetry         install or update poetry
 install                install project via poetry
 update                 update the sources and installation and generate "conf/requirements.txt"
@@ -107,9 +100,9 @@ publish                Release new version to PyPi
 local-test             Run local_test.py to run the project locally
 local-diff-settings    Run "manage.py diffsettings" with local test
 
-~/django_ynh$ make install-poetry
-~/django_ynh$ make install
-~/django_ynh$ make local-test
+~/django_example_ynh$ make install-poetry
+~/django_example_ynh$ make install
+~/django_example_ynh$ make local-test
 ```
 
 Notes:
@@ -123,6 +116,10 @@ Notes:
 
 * [compare v0.1.5...master](https://github.com/YunoHost-Apps/django_ynh/compare/v0.1.5...master) **dev**
   * tbc
+* v0.2.0.alpha0 **dev**
+  * rename/split `django_ynh` into:
+    * `django_yunohost_integration` - Python package with the glue code to integrate a Django project with YunoHost
+    * `django_example_ynh` - Demo YunoHost App to demonstrate the integration of a Django project under YunoHost
 * [v0.1.5 - 19.01.2021](https://github.com/YunoHost-Apps/django_ynh/compare/v0.1.4...v0.1.5)
   * Make some deps `gunicorn`, `psycopg2-binary`, `django-redis`, `django-axes` optional
 * [v0.1.4 - 08.01.2021](https://github.com/YunoHost-Apps/django_ynh/compare/v0.1.3...v0.1.4)
@@ -150,7 +147,7 @@ Notes:
 
 These projects used `django_ynh`:
 
-* https://github.com/YunoHost-Apps/pyinventory_ynh
+* https://github.com/YunoHost-Apps/django_example_ynh
 * https://github.com/YunoHost-Apps/django-for-runners_ynh
 
 ---

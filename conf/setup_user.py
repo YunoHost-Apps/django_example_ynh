@@ -1,6 +1,7 @@
-def setup_demo_user(user):
+def setup_project_user(user):
     """
-    The django_ynh DEMO use the Django admin. So we need a "staff" user ;)
+    All users used the Django admin, so we need to set the "staff" user flag.
+    Called from django_ynh.sso_auth
     """
     user.is_staff = True
     user.save()
