@@ -113,6 +113,7 @@ chown -R "$app" "$final_path"
 	source "${final_path}/venv/bin/activate"
 	set -o nounset
 	ynh_exec_as $app $final_path/venv/bin/pip install --upgrade pip
+    ynh_exec_as $app $final_path/venv/bin/pip install psycopg2-binary
 	ynh_exec_as $app $final_path/venv/bin/pip install -r "$final_path/requirements.txt"
 	ynh_exec_as $app $final_path/venv/bin/pip install --upgrade "$pip_install_string"
 )
