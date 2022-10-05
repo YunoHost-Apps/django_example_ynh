@@ -15,6 +15,9 @@ from django_yunohost_integration.base_settings import *  # noqa:F401,F403
 from django_yunohost_integration.secret_key import get_or_create_secret as __get_or_create_secret
 
 
+from example_project.settings.base import *  # noqa:F401,F403 isort:skip
+
+
 FINALPATH = __Path('__FINALPATH__')  # /opt/yunohost/$app
 assert FINALPATH.is_dir(), f'Directory not exists: {FINALPATH}'
 
@@ -45,7 +48,7 @@ YNH_SETUP_USER = 'setup_user.setup_project_user'
 
 SECRET_KEY = __get_or_create_secret(FINALPATH / 'secret.txt')  # /opt/yunohost/$app/secret.txt
 
-# INSTALLED_APPS.append('<insert-your-app-here>')
+INSTALLED_APPS.append('example_project.apps.ExampleProjectAppConfig')
 
 MIDDLEWARE.insert(
     MIDDLEWARE.index('django.contrib.auth.middleware.AuthenticationMiddleware') + 1,
@@ -146,7 +149,7 @@ MEDIA_ROOT = str(PUBLIC_PATH / 'media')
 LOGGING['handlers']['log_file']['filename'] = str(LOG_FILE)
 
 # Example how to add logging to own app:
-LOGGING['loggers']['django_example_ynh'] = {
+LOGGING['loggers']['example_project'] = {
     'handlers': ['syslog', 'log_file', 'mail_admins'],
     'level': 'INFO',
     'propagate': False,

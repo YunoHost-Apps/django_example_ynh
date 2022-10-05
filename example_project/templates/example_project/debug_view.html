@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Example Project / Debug View{% endblock %}
+
+{% block branding %}
+    <h1 id="site-name"><a href="/">Debug View</a></h1>
+{% endblock %}
+
+{% block content %}
+    <h2>YunoHost Django Example Project v{{ version }}</h2>
+    <p>Go to <a href="{% url 'admin:index' %}">Django Admin</a>.</p>
+    <table>
+        <tr>
+            <td>Env. type:</td>
+            <td><code>{{ env_type }}</code></td>
+        </tr>
+        <tr>
+            <td>User:</td>
+            <td>{{ user }}</td>
+        </tr>
+        <tr>
+            <td>META:</td>
+            <td><pre><code>{{ meta|pprint }}</code></pre></td>
+        </tr>
+    </table>
+{% endblock %}

@@ -5,7 +5,7 @@
 	"description": {
 		"en": "App to demonstrate the integration of a Django project under YunoHost via https://github.com/YunoHost-Apps/django_yunohost_integration"
 	},
-	"version": "0.4.1~ynh1",
+	"version": "0.5.0rc1~ynh1",
 	"url": "https://github.com/YunoHost-Apps/django_example_ynh",
     "upstream": {
         "license": "GPL-3.0",
@@ -21,7 +21,7 @@
 	},
 	"previous_maintainers": [],
 	"requirements": {
-		"yunohost": ">= 4.4"
+		"yunohost": ">=11"
 	},
 	"multi_instance": true,
 	"services": [

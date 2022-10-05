@@ -1,20 +1,23 @@
 [tool.poetry]
 name = "django_example_ynh"
-version = "0.4.1+ynh1"
+version = "0.5.0rc1+ynh1"
 description = "Demo YunoHost Application to demonstrate the integration of a Django project under YunoHost."
 authors = ["JensDiemer <git@jensdiemer.de>"]
 license = "GPL"
 homepage = "https://github.com/YunoHost-Apps/django_example_ynh"
+packages = [
+    { include = "example_project" },
+]
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/YunoHost-Apps/django_example_ynh/issues"
 
 [tool.poetry.dependencies]
-python = ">=3.7,<4.0.0"  # TODO: Update to >=3.8 after YunoHost updates to Bullseye
+python = ">=3.9,<4.0.0"  # Stay with 3.9 until YunoHost used >=Debian 11 (Bullseye)
 
 # extras "ynh" will install: gunicorn, psycopg2, django-redis and django-axes
 # see: https://github.com/YunoHost-Apps/django_yunohost_integration/blob/main/pyproject.toml
-django_yunohost_integration = {version = ">=0.4.1", extras = ["ynh"]}  # https://github.com/YunoHost-Apps/django_yunohost_integration
+django_yunohost_integration = {version = ">=0.5.0rc1", extras = ["ynh"]}  # https://github.com/YunoHost-Apps/django_yunohost_integration
 
 [tool.poetry.dev-dependencies]
 bx_py_utils = "*"  # https://github.com/boxine/bx_py_utils
@@ -100,7 +103,7 @@ omit = [".*"]
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{37,38,39,310}
+envlist = py{39,310}
 skip_missing_interpreters = True
 
 [testenv]

@@ -7,7 +7,6 @@ from django.test.testcases import TestCase
 from django.urls.base import reverse
 
 from django_yunohost_integration.test_utils import generate_basic_auth
-from django_yunohost_integration.views import request_media_debug_view
 
 
 @override_settings(DEBUG=False)
@@ -34,45 +33,25 @@ class DjangoYnhTestCase(HtmlAssertionMixin, TestCase):
         assert settings.ADMIN_EMAIL == 'foo-bar@test.tld'
         assert settings.DEFAULT_FROM_EMAIL == 'django_app@test.tld'
 
-    def test_request_media_debug_view(self):
-        assert reverse(request_media_debug_view) == '/app_path/debug/'
-
-        self.client.cookies['SSOwAuthUser'] = 'test'
-        kwargs = dict(
-            path='/app_path/debug/',
-            HTTP_REMOTE_USER='test',
-            HTTP_AUTH_USER='test',
-            HTTP_AUTHORIZATION='basic dGVzdDp0ZXN0MTIz',
-            secure=True,
-        )
-        assert settings.DEBUG is False
-        with self.assertRaisesMessage(AssertionError, 'Only in DEBUG mode available!'):
-            self.client.get(**kwargs)
-
-        with override_settings(DEBUG=True):
-            response = self.client.get(**kwargs)
-            self.assert_html_parts(
-                response,
-                parts=('request.META',),
-            )
-
     def test_auth(self):
         assert settings.PATH_URL == 'app_path'
-        assert reverse('admin:index') == '/app_path/'
+        assert reverse('admin:index') == '/app_path/admin/'
 
         # SecurityMiddleware should redirects all non-HTTPS requests to HTTPS:
         assert settings.SECURE_SSL_REDIRECT is True
-        response = self.client.get('/app_path/', secure=False)
+        response = self.client.get('/app_path/admin/', secure=False)
         self.assertRedirects(
             response,
             status_code=301,  # permanent redirect
-            expected_url='https://testserver/app_path/',
+            expected_url='https://testserver/app_path/admin/',
             fetch_redirect_response=False,
         )
 
-        response = self.client.get('/app_path/', secure=True)
+        response = self.client.get('/app_path/admin/', secure=True)
         self.assertRedirects(
-            response, expected_url='/app_path/login/?next=/app_path/', fetch_redirect_response=False
+            response,
+            expected_url='/app_path/admin/login/?next=%2Fapp_path%2Fadmin%2F',
+            fetch_redirect_response=False,
         )
 
     def test_create_unknown_user(self):
@@ -81,7 +60,7 @@ class DjangoYnhTestCase(HtmlAssertionMixin, TestCase):
         self.client.cookies['SSOwAuthUser'] = 'test'
 
         response = self.client.get(
-            path='/app_path/',
+            path='/app_path/admin/',
             HTTP_REMOTE_USER='test',
             HTTP_AUTH_USER='test',
             HTTP_AUTHORIZATION='basic dGVzdDp0ZXN0MTIz',
@@ -98,7 +77,7 @@ class DjangoYnhTestCase(HtmlAssertionMixin, TestCase):
         self.assert_html_parts(
             response,
             parts=(
-                '<h1 id="site-name"><a href="/app_path/">Django administration</a></h1>',
+                '<h1 id="site-name"><a href="/app_path/admin/">Django administration</a></h1>',
                 '<strong>test</strong>',
             ),
         )
@@ -110,7 +89,7 @@ class DjangoYnhTestCase(HtmlAssertionMixin, TestCase):
         self.client.cookies['SSOwAuthUser'] = 'test'
 
         response = self.client.get(
-            path='/app_path/',
+            path='/app_path/admin/',
             HTTP_REMOTE_USER='test',
             HTTP_AUTH_USER='foobar',  # <<< wrong user name
             HTTP_AUTHORIZATION='basic dGVzdDp0ZXN0MTIz',
