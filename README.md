@@ -26,7 +26,7 @@ Demo [YunoHost Application](https://install-app.yunohost.org/?app=django_example
 Pull requests welcome ;)
 
 
-**Shipped version:** 0.4.1~ynh1
+**Shipped version:** 0.5.0rc1~ynh1 *(:warning: This is the `dev3` branch. The [`master` branch](https://github.com/YunoHost-Apps/django_example_ynh_ynh/tree/master) used in the catalog is currently on version 0.4.1\~ynh1.)*
 
 ## Disclaimers / important information
 
