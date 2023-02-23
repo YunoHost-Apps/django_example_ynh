@@ -1,37 +1,43 @@
 [tool.poetry]
 name = "django_example_ynh"
-version = "0.5.0rc1+ynh1"
+version = "0.2.0+ynh1"
 description = "Demo YunoHost Application to demonstrate the integration of a Django project under YunoHost."
-authors = ["JensDiemer <git@jensdiemer.de>"]
-license = "GPL"
+authors = ["Jens Diemer <django_example_ynh@jensdiemer.de>"]
 homepage = "https://github.com/YunoHost-Apps/django_example_ynh"
+license = "GPL-3.0-or-later"
+readme = 'README.md'
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/YunoHost-Apps/django_example_ynh/issues"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0.0"  # Stay with 3.9 until YunoHost used >=Debian 11 (Bullseye)
-
-django-example = ">=0.1.0rc0"  # https://github.com/jedie/django-example
-
+#
+django_example = ">=0.1.0rc0"  # https://github.com/jedie/django-example
+#
 # extras "ynh" will install: gunicorn, psycopg2, django-redis and django-axes
 # see: https://github.com/YunoHost-Apps/django_yunohost_integration/blob/main/pyproject.toml
-django_yunohost_integration = {version = ">=0.5.0rc1", extras = ["ynh"]}  # https://github.com/YunoHost-Apps/django_yunohost_integration
+django_yunohost_integration = {version = ">=0.5.1", extras = ["ynh"]}  # https://github.com/YunoHost-Apps/django_yunohost_integration
 
 
 [tool.poetry.dev-dependencies]
 bx_py_utils = "*"  # https://github.com/boxine/bx_py_utils
 bx_django_utils = "*"  # https://github.com/boxine/bx_django_utils
-tox = "*"
+tox = ">=4.4.4"  # https://github.com/tox-dev/tox
+coverage= "*"  # https://github.com/nedbat/coveragepy
+darker = "*"  # https://github.com/akaihola/darker
+isort = "*"  # https://github.com/pycqa/isort
+flynt = "*"  # https://github.com/ikamensh/flynt
+flake8 = "*"  # https://github.com/pycqa/flake8
+EditorConfig = "*"  # https://github.com/editorconfig/editorconfig-core-py
+safety = "*"  # https://github.com/pyupio/safety
+mypy = "*"  # https://github.com/python/mypy
+tomli = "*"  # https://github.com/hukkin/tomli
+twine = "*"  # https://github.com/pypa/twine
+poetry-publish = "*"  # https://github.com/jedie/poetry-publish
 pytest = "*"
 pytest-cov = "*"
 pytest-django = "*"
-pytest-darker = "*"  # https://github.com/akaihola/pytest-darker
-coveralls = "*"
-isort = "*"
-flake8 = "*"
-EditorConfig = "*"  # https://github.com/editorconfig/editorconfig-core-py
-safety = "*"  # https://github.com/pyupio/safety
 requests = "*"  # https://github.com/psf/requests
 packaging = "*"  # https://github.com/pypa/packagi
 beautifulsoup4 = "*"  # https://pypi.org/project/beautifulsoup4/
@@ -45,13 +51,15 @@ build-backend = "poetry.core.masonry.api"
 [tool.darker]
 src = ['.']
 revision = "origin/master..."
-line_length = 100
+line_length = 119
 verbose = true
+color = true
 skip_string_normalization = true
 diff = false
 check = false
 stdout = false
 isort = true
+flynt = true
 lint = [
     "flake8",
 ]
@@ -62,9 +70,9 @@ log_level = "INFO"
 # https://pycqa.github.io/isort/docs/configuration/config_files/#pyprojecttoml-preferred-format
 atomic=true
 profile='black'
-skip_glob=["*/htmlcov/*","*/migrations/*","*/local_test/*"]
-known_first_party=['django_yunohost_integration']
-line_length=100
+skip_glob=[".*", "*/htmlcov/*","*/migrations/*","*/local_test/*"]
+known_first_party=['django_example']
+line_length=119
 lines_after_imports=2
 
 
@@ -88,7 +96,6 @@ addopts = """
     --cov-report xml
     --no-cov-on-fail
     --showlocals
-    --darker
     --doctest-modules
     --failed-first
     --new-first
@@ -96,15 +103,19 @@ addopts = """
 
 
 [tool.coverage.run]
-omit = [".*"]
+source = ['.']
+omit = ['.*', '*/tests/*']
+
+[tool.coverage.report]
+skip_empty = true
+fail_under = 45
 
 
-[tool.tox]
-# https://tox.readthedocs.io/en/latest/example/basic.html#pyproject-toml-tox-legacy-ini
+[tool.tox]  # https://tox.wiki/en/latest/config.html#pyproject-toml
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{39,310}
+envlist = py{311,310,39}
 skip_missing_interpreters = True
 
 [testenv]
@@ -113,3 +124,35 @@ whitelist_externals = make
 commands =
     make pytest
 """
+
+
+[manageprojects] # https://github.com/jedie/manageprojects
+initial_revision = "da47a1e"
+initial_date = 2022-11-06T17:25:53+01:00
+cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
+cookiecutter_directory = "yunohost_django_package"
+applied_migrations = [
+    "4dbd146", # 2022-11-06T17:59:58+01:00
+    "baf1ebc", # 2022-11-30T21:19:10+01:00
+    "44aa620", # 2022-12-21T19:59:39+01:00
+    "b204761", # 2022-12-21T20:25:20+01:00
+    "5096b65", # 2022-12-30T14:43:05+01:00
+    "d970456", # 2023-02-20T16:19:35+01:00
+]
+
+[manageprojects.cookiecutter_context.cookiecutter]
+project_name = "Django Example"
+full_name = "Jens Diemer"
+github_username = "jedie"
+author_email = "django_example_ynh@jensdiemer.de"
+upstream_pkg_name = "django_example"
+upstream_url = "https://github.com/jedie/django-example"
+ynh_app_pkg_name = "django_example_ynh"
+ynh_app_url = "https://github.com/YunoHost-Apps/django_example_ynh"
+bug_tracker_url = "https://github.com/jedie/django-example/issues"
+upstream_version = "0.1.0rc0"
+ynh_version = "1"
+package_description = "Demo YunoHost Application to demonstrate the integration of a Django project under YunoHost."
+license = "GPL-3.0-or-later"
+_template = "https://github.com/jedie/cookiecutter_templates/"
+_output_dir = "~/repos_ynh/django_example_ynh"

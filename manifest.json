@@ -3,18 +3,18 @@
 	"id": "django_example_ynh",
 	"packaging_format": 1,
 	"description": {
-		"en": "App to demonstrate the integration of a Django project under YunoHost via https://github.com/YunoHost-Apps/django_yunohost_integration"
-	},
-	"version": "0.5.0rc1~ynh1",
+        "en": "Demo YunoHost Application to demonstrate the integration of a Django project under YunoHost."
+    },
+	"version": "0.2.0~ynh1",
 	"url": "https://github.com/YunoHost-Apps/django_example_ynh",
     "upstream": {
         "license": "GPL-3.0",
         "website": "https://github.com/YunoHost-Apps/django_example_ynh",
         "admindoc": "https://github.com/YunoHost-Apps/django_example_ynh",
-        "userdoc": "https://github.com/YunoHost-Apps/django_example_ynh",
+        "userdoc": "https://github.com/jedie/django-example",
         "code": "https://github.com/YunoHost-Apps/django_example_ynh"
     },
-	"license": "GPL-3.0",
+	"license": "GPL-3.0-or-later",
 	"maintainer": {
 		"name": "Jens Diemer",
 		"email": "django_example_ynh@jensdiemer.de"
@@ -36,8 +36,8 @@
 			{
 				"name": "path",
 				"type": "path",
-				"example": "/django_example_ynh",
-				"default": "/django_example_ynh"
+				"example": "/django_example",
+				"default": "/django_example"
 			},
 			{
 				"name": "admin",

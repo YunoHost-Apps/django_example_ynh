@@ -8,9 +8,9 @@ import tomli
 from bx_django_utils.filename import clean_filename
 from bx_py_utils.path import assert_is_dir, assert_is_file
 from django_tools.unittest_utils.project_setup import check_editor_config
-
-import django_yunohost_integration
 from django_yunohost_integration.test_utils import assert_project_version
+
+from django_example import __version__
 
 
 PACKAGE_ROOT = Path(__file__).parent.parent
@@ -25,17 +25,19 @@ def assert_file_contains_string(file_path, string):
 
 
 def test_version():
-    upstream_version = django_yunohost_integration.__version__
-
-    assert_project_version(
-        current_version=upstream_version,
-        github_project_url='https://github.com/YunoHost-Apps/django_yunohost_integration',
-    )
+    if 'GITHUB_ACTION' not in os.environ:
+        # Github has a rate-limiting... So don't fetch the API if we run as GitHub action
+        assert_project_version(
+            current_version=__version__,
+            github_project_url='https://github.com/jedie/django-example',
+        )
 
     pyproject_toml_path = Path(PACKAGE_ROOT, 'pyproject.toml')
     pyproject_toml = tomli.loads(pyproject_toml_path.read_text(encoding='UTF-8'))
     pyproject_version = pyproject_toml['tool']['poetry']['version']
-    assert pyproject_version.startswith(f'{upstream_version}+ynh')
+    assert pyproject_version.startswith(
+        f'{__version__}+ynh'
+    ), f'{pyproject_version!r} does not start with "{__version__}+ynh"'
 
     # pyproject.toml needs a PEP 440 conform version and used "+ynh"
     # the YunoHost syntax is: "~ynh", just "convert this:
@@ -108,3 +110,28 @@ def test_screenshot_filenames():
 
 def test_check_editor_config():
     check_editor_config(package_root=PACKAGE_ROOT)
+
+
+def _call_make(*args):
+    make_bin = shutil.which('make')
+    assert make_bin
+    return subprocess.check_output(
+        (make_bin,) + args,
+        text=True,
+        env=dict(PATH=os.environ['PATH']),
+        stderr=subprocess.STDOUT,
+        cwd=str(PACKAGE_ROOT),
+    )
+
+
+def test_check_code_style():
+    # First try:
+    try:
+        _call_make('lint')
+    except subprocess.CalledProcessError:
+        # Fix and test again:
+        try:
+            _call_make('fix-code-style')
+            _call_make('lint')
+        except subprocess.CalledProcessError as err:
+            raise AssertionError(f'Linting error:\n{"-"*100}\n{err.stdout}\n{"-"*100}')

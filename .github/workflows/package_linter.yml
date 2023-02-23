@@ -1,6 +1,8 @@
 name: YunoHost apps package linter
 
 on:
+  # Allow to manually trigger the workflow
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -12,11 +14,26 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
+      - name: 'Set up Python'
+        uses: actions/setup-python@v4
+        # https://github.com/marketplace/actions/setup-python
+        with:
+          cache: 'pip' # caching pip dependencies
+          cache-dependency-path: '**/requirements.dev.txt'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install toml
 
       - name: 'Clone YunoHost apps package linter'
         run: |
           git clone --depth=1 https://github.com/YunoHost/package_linter ~/package_linter
+
+      - name: 'Install requirements'
+        run: pip3 install toml
 
       - name: 'Run linter'
         run: |

@@ -11,7 +11,6 @@ import sys
 from pathlib import Path
 
 import django
-
 from django_yunohost_integration.local_test import create_local_test
 
 

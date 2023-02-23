@@ -1,4 +1,4 @@
-# see http://editorconfig.org
+# see https://editorconfig.org
 root = true
 
 [*]
@@ -10,11 +10,11 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 
 [*.py]
-max_line_length = 100
+max_line_length = 119
 
 [{Makefile,**.mk}]
 indent_style = tab
 insert_final_newline = false
 
 [*.yml]
-indent_style = tab
+indent_size = 2
