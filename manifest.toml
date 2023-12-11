@@ -56,21 +56,25 @@ ram.runtime = "50M" # **estimate** minimum ram requirement. e.g. 50M, 400M, 1G, 
     type = "group"
     default = "admins"
 
-    [install.default_from_email] # __DEFAULT_FROM_EMAIL__
+    [install.default_from_email]
+    # Provides __DEFAULT_FROM_EMAIL__ in templates
     ask.en = "Default email address to use for various automated emails."
     type = "email"
     example = "admin@example.com"
 
-    [install.admin_email] # __ADMIN_EMAIL__
+    [install.admin_email]
+    # Provides __ADMIN_EMAIL__ in templates
     ask.en = "EMail address for error emails."
     type = "email"
     example = "admin@example.com"
 
-    [install.debug_enabled] # __DEBUG_ENABLED__ will be set to "0" or "1" string
+    [install.debug_enabled]
+    # Provides __DEBUG_ENABLED__ in templates will be set to "0" or "1" string
     ask.en = "Should be never enabled in production!"
     type = "boolean"
 
-    [install.log_level] # __LOG_LEVEL__
+    [install.log_level]
+    # Provides __LOG_LEVEL__ in templates
     ask.en = "Logging level"
     type = "select"
     choices = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
