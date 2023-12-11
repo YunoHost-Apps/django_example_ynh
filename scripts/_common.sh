@@ -42,10 +42,10 @@ myynh_setup_python_venv() {
     # Always recreate everything fresh with current python version
     ynh_secure_remove "$data_dir/venv"
 
-    # Skip pip because of: https://github.com/YunoHost/issues/issues/1960
-    python3 -m venv --without-pip "$data_dir/venv"
-
     chown -c -R "$app:" "$data_dir"
+
+    # Skip pip because of: https://github.com/YunoHost/issues/issues/1960
+    ynh_exec_as $app python3 -m venv --without-pip "$data_dir/venv"
 
     # run source in a 'sub shell'
     (
@@ -126,4 +126,3 @@ ynh_redis_remove_db() {
 	local db=$1
 	redis-cli -n "$db" flushall
 }
-
