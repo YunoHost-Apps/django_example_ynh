@@ -23,7 +23,7 @@ code = "https://github.com/YunoHost-Apps/django_example_ynh"
 
 [integration]
 # https://yunohost.org/en/packaging_manifest#integration-section
-yunohost = ">=11.2"
+yunohost = ">=11.2.12"
 architectures = "all"
 multi_instance = true
 ldap = true
