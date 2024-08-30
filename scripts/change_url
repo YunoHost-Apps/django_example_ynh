@@ -1,49 +1,41 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC STARTING
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# STANDARD MODIFICATIONS
-#=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping systemd service '$app'..."
+ynh_script_progression "Stopping systemd service '$app'..."
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path="$log_file"
+ynh_systemctl --service=$app --action="stop" --log_path="$log_file"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
-ynh_script_progression --message="Updating nginx web server configuration..."
+ynh_script_progression "Updating nginx web server configuration..."
 
-ynh_change_url_nginx_config
+ynh_config_change_url_nginx
 
 #=================================================
 # UPDATE DJANGO SETTINGS
 #=================================================
-ynh_script_progression --message="Update $app settings file..." --weight=1
+ynh_script_progression "Update $app settings file..."
 
 path=$new_path
 domain=$new_domain
 
-ynh_add_config --template="settings.py" --destination="$data_dir/settings.py"
+ynh_config_add --template="settings.py" --destination="$data_dir/settings.py"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting systemd service '$app'..." --weight=5
+ynh_script_progression "Starting systemd service '$app'..."
 
-ynh_systemd_action --service_name=$app --action="start" --log_path="$log_file"
+ynh_systemctl --service=$app --action="start" --log_path="$log_file"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Change of URL completed for $app" --last
+ynh_script_progression "Change of URL completed for $app"

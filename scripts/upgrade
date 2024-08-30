@@ -12,67 +12,64 @@ source /usr/share/yunohost/helpers
 
 if [ -z "$debug_enabled" ]; then
 	debug_enabled="0"
-	ynh_app_setting_set --app=$app --key=debug_enabled --value="$debug_enabled"
+	ynh_app_setting_set --key=debug_enabled --value="$debug_enabled"
 fi
 
 if [ -z "$log_level" ]; then
 	log_level="WARNING"
-	ynh_app_setting_set --app=$app --key=log_level --value="$log_level"
+	ynh_app_setting_set --key=log_level --value="$log_level"
 fi
 
 if [ -z "$admin_email" ]; then
 	admin_email="${admin}@${domain}"
-    ynh_app_setting_set --app=$app --key=admin_email --value="$admin_email"
+    ynh_app_setting_set --key=admin_email --value="$admin_email"
 fi
 
 if [ -z "$default_from_email" ]; then
 	default_from_email="${app}@${domain}"
-	ynh_app_setting_set --app=$app --key=default_from_email --value="$default_from_email"
+	ynh_app_setting_set --key=default_from_email --value="$default_from_email"
 fi
 
 #=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping systemd service '$app'..." --weight=5
+ynh_script_progression "Stopping systemd service '$app'..."
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path="$log_file"
-
+ynh_systemctl --service=$app --action="stop" --log_path="$log_file"
 
 #=================================================
 # SETUP SYSTEMD
 #=================================================
-ynh_script_progression --message="Configuring systemd service '$app'..." --weight=5
+ynh_script_progression "Configuring systemd service '$app'..."
 
-ynh_add_systemd_config --service=$app --template="systemd.service"
+ynh_config_add_systemd
 
 #=================================================
 # PYTHON VIRTUALENV
 #=================================================
-ynh_script_progression --message="Create and setup Python virtualenv..." --weight=45
+ynh_script_progression "Create and setup Python virtualenv..."
 cp ../conf/requirements.txt "$data_dir/requirements.txt"
 myynh_setup_python_venv
 
 #=================================================
 # copy config files
 # ================================================
-ynh_script_progression --message="Create project configuration files..."
+ynh_script_progression "Create project configuration files..."
 
-ynh_add_config --template="gunicorn.conf.py" --destination="$data_dir/gunicorn.conf.py"
+ynh_config_add --template="gunicorn.conf.py" --destination="$data_dir/gunicorn.conf.py"
 
-ynh_add_config --template="manage.py" --destination="$data_dir/manage.py"
+ynh_config_add --template="manage.py" --destination="$data_dir/manage.py"
 chmod -c +x "$data_dir/manage.py"
 
-ynh_add_config --template="settings.py" --destination="$data_dir/settings.py"
-ynh_add_config --template="setup_user.py" --destination="$data_dir/setup_user.py"
-ynh_add_config --template="urls.py" --destination="$data_dir/urls.py"
-ynh_add_config --template="wsgi.py" --destination="$data_dir/wsgi.py"
+ynh_config_add --template="settings.py" --destination="$data_dir/settings.py"
+ynh_config_add --template="setup_user.py" --destination="$data_dir/setup_user.py"
+ynh_config_add --template="urls.py" --destination="$data_dir/urls.py"
+ynh_config_add --template="wsgi.py" --destination="$data_dir/wsgi.py"
 
 #=================================================
 # MIGRATE PYINVENTORY
 #=================================================
-ynh_script_progression --message="migrate/collectstatic/createadmin..." --weight=10
+ynh_script_progression "migrate/collectstatic/createadmin..."
 
 cd "$data_dir" || exit
 
@@ -89,33 +86,30 @@ cd "$data_dir" || exit
 # This may fail in some cases with errors, etc., but the app works and the user can fix issues later.
 ./manage.py check --deploy || true
 
-
 #=================================================
 # SETUP LOGROTATE
 #=================================================
-ynh_script_progression --message="Upgrading logrotate configuration..."
+ynh_script_progression "Upgrading logrotate configuration..."
 
 # Use logrotate to manage app-specific logfile(s)
-ynh_use_logrotate --logfile="$log_file" --specific_user=$app --non-append
+ynh_config_add_logrotate "$log_file"
 
-#=================================================
-# GENERIC FINALIZATION
 #=================================================
 # SECURE FILES AND DIRECTORIES
 #=================================================
-ynh_script_progression --message="Set file permissions..."
+ynh_script_progression "Set file permissions..."
 myynh_fix_file_permissions
 
 #=================================================
 # Start the app server via systemd
 #=================================================
-ynh_script_progression --message="Starting systemd service '$app'..." --weight=5
+ynh_script_progression "Starting systemd service '$app'..."
 
 yunohost service add $app
-ynh_systemd_action --service_name=$app --action="start" --log_path="$log_file"
+ynh_systemctl --service=$app --action="start" --log_path="$log_file"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed" --last
+ynh_script_progression "Upgrade of $app completed"

@@ -24,6 +24,7 @@ code = "https://github.com/YunoHost-Apps/django_example_ynh"
 [integration]
 # https://yunohost.org/en/packaging_manifest#integration-section
 yunohost = ">=11.2.12"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 ldap = true
@@ -86,6 +87,7 @@ ram.runtime = "50M" # **estimate** minimum ram requirement. e.g. 50M, 400M, 1G, 
     # This will provision/deprovision a unix system user
 
     [resources.install_dir]
+    group = "www-data:r-x"
     # https://yunohost.org/en/packaging_apps_resources#install-dir
     # This will create/remove the install dir as /var/www/$app/
     # and store the corresponding setting $install_dir and template variable __INSTALL_DIR__

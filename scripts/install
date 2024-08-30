@@ -31,67 +31,67 @@ source /usr/share/yunohost/helpers
 #=================================================
 # SETTINGS
 #=================================================
-ynh_script_progression --message="Storing installation settings..."
+ynh_script_progression "Storing installation settings..."
 
 # Logging:
 log_file="/var/log/$app/$app.log"
-ynh_app_setting_set --app=$app --key=log_file --value="$log_file"
+ynh_app_setting_set --key=log_file --value="$log_file"
 
 # Redis:
 redis_db=$(ynh_redis_get_free_db)
-ynh_app_setting_set --app=$app --key=redis_db --value="$redis_db"
+ynh_app_setting_set --key=redis_db --value="$redis_db"
 
 # App settings:
-ynh_app_setting_set --app=$app --key=default_from_email --value="$default_from_email"
-ynh_app_setting_set --app=$app --key=admin_email --value="$admin_email"
-ynh_app_setting_set --app=$app --key=debug_enabled --value="$debug_enabled"
-ynh_app_setting_set --app=$app --key=log_level --value="$log_level"
+ynh_app_setting_set --key=default_from_email --value="$default_from_email"
+ynh_app_setting_set --key=admin_email --value="$admin_email"
+ynh_app_setting_set --key=debug_enabled --value="$debug_enabled"
+ynh_app_setting_set --key=log_level --value="$log_level"
 
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
-ynh_script_progression --message="Validating installation parameters..."
+ynh_script_progression "Validating installation parameters..."
 
 mkdir -p "$install_dir/media" "$install_dir/static"
 
 #=================================================
 # SETUP LOG FILE
 #=================================================
-ynh_script_progression --message="Setup logging..."
+ynh_script_progression "Setup logging..."
 
 myynh_setup_log_file
 
 # Use logrotate to manage application logfile(s)
-ynh_use_logrotate --logfile="$log_file" --specific_user=$app
+ynh_config_add_logrotate "$log_file"
 
 #=================================================
 # PYTHON VIRTUALENV
 #=================================================
-ynh_script_progression --message="Create and setup Python virtualenv..." --weight=45
+ynh_script_progression "Create and setup Python virtualenv..."
 cp ../conf/requirements.txt "$data_dir/requirements.txt"
 myynh_setup_python_venv
 
 #=================================================
 # copy config files
 # ================================================
-ynh_script_progression --message="Create $app configuration files..."
+ynh_script_progression "Create $app configuration files..."
 
-ynh_add_config --template="gunicorn.conf.py" --destination="$data_dir/gunicorn.conf.py"
+ynh_config_add --template="gunicorn.conf.py" --destination="$data_dir/gunicorn.conf.py"
 
-ynh_add_config --template="manage.py" --destination="$data_dir/manage.py"
+ynh_config_add --template="manage.py" --destination="$data_dir/manage.py"
 chmod -c +x "$data_dir/manage.py"
 
-ynh_add_config --template="settings.py" --destination="$data_dir/settings.py"
-ynh_add_config --template="setup_user.py" --destination="$data_dir/setup_user.py"
-ynh_add_config --template="urls.py" --destination="$data_dir/urls.py"
-ynh_add_config --template="wsgi.py" --destination="$data_dir/wsgi.py"
+ynh_config_add --template="settings.py" --destination="$data_dir/settings.py"
+ynh_config_add --template="setup_user.py" --destination="$data_dir/setup_user.py"
+ynh_config_add --template="urls.py" --destination="$data_dir/urls.py"
+ynh_config_add --template="wsgi.py" --destination="$data_dir/wsgi.py"
 
 touch "$data_dir/local_settings.py"
 
 #=================================================
 # MIGRATE / COLLECTSTATIC / CREATEADMIN
 #=================================================
-ynh_script_progression --message="migrate/collectstatic/createadmin..." --weight=10
+ynh_script_progression "migrate/collectstatic/createadmin..."
 
 cd "$data_dir" || exit
 
@@ -111,46 +111,44 @@ cd "$data_dir" || exit
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
+ynh_script_progression "Integrating service in YunoHost..."
 
 yunohost service add $app
 
 #=================================================
-# GENERIC FINALIZATION
-#=================================================
 # SECURE FILES AND DIRECTORIES
 #=================================================
-ynh_script_progression --message="Set file permissions..."
+ynh_script_progression "Set file permissions..."
 myynh_fix_file_permissions
 
 #=================================================
 # SETUP SYSTEMD
 #=================================================
-ynh_script_progression --message="Configuring systemd service '$app'..." --weight=5
+ynh_script_progression "Configuring systemd service '$app'..."
 
 # https://yunohost.org/en/packaging_apps_helpers#ynh-add-systemd-config
 # https://github.com/YunoHost/yunohost/blob/dev/helpers/systemd
-ynh_add_systemd_config --service=$app --template="systemd.service"
+ynh_config_add_systemd
 
 #=================================================
 # Start the app server via systemd
 #=================================================
-ynh_script_progression --message="Starting systemd service '$app'..." --weight=5
+ynh_script_progression "Starting systemd service '$app'..."
 
-ynh_systemd_action --service_name=$app --action="start" --log_path="$log_file"
+ynh_systemctl --service=$app --action="start" --log_path="$log_file"
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring nginx web server..."
+ynh_script_progression "Configuring nginx web server..."
 
 # Create a dedicated nginx config
 # https://yunohost.org/en/contribute/packaging_apps/helpers
 # https://github.com/YunoHost/yunohost/blob/dev/helpers/nginx
-ynh_add_nginx_config "public_path" "port"
+ynh_config_add_nginx "public_path" "port"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression "Installation of $app completed"
