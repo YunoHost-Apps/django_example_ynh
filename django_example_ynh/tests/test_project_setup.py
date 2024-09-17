@@ -65,6 +65,7 @@ class ProjectSetupTestCase(TestCase):
         self.assertEqual(
             set(self.manifest_cfg['install'].keys()),
             {
+                'update_python',
                 'admin',
                 'admin_email',
                 'debug_enabled',

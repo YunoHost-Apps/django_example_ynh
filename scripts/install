@@ -68,6 +68,7 @@ ynh_config_add_logrotate "$log_file"
 # PYTHON VIRTUALENV
 #=================================================
 cp ../conf/install_python.py "$data_dir/install_python.py"
+cp ../conf/setup_python.py "$data_dir/setup_python.py"
 cp ../conf/requirements.txt "$data_dir/requirements.txt"
 myynh_setup_python_venv
 

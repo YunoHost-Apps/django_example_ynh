@@ -53,6 +53,12 @@ ram.runtime = "50M" # **estimate** minimum ram requirement. e.g. 50M, 400M, 1G, 
     type = "group"
     default = "admins"
 
+    [install.update_python] # __UPDATE_PYTHON__
+    ask.en = "How to update Python? 'setup' will use redistributable Python builts (fast), 'install' will compile Python from source (slow)."
+    type = "select"
+    choices = ["INSTALL", "SETUP"]
+    default = "SETUP"
+
     [install.default_from_email] # __DEFAULT_FROM_EMAIL__
     ask.en = "Default email address to use for various automated emails."
     type = "email"

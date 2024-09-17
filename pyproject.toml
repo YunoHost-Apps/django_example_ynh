@@ -21,7 +21,7 @@ dependencies = [
 dev = [
     "bx_django_utils",  # https://github.com/boxine/bx_django_utils
     "beautifulsoup4",  # https://pypi.org/project/beautifulsoup4/
-    "manageprojects>=0.18.0",  # https://github.com/jedie/manageprojects
+    "manageprojects>=0.19.1",  # https://github.com/jedie/manageprojects
     "pip-tools",  # https://github.com/jazzband/pip-tools/
     "tblib",   # https://github.com/ionelmc/python-tblib
     "tox",  # https://github.com/tox-dev/tox
@@ -174,6 +174,7 @@ applied_migrations = [
     "fad909d", # 2023-08-22T19:20:34+02:00
     "4abd4c0", # 2023-11-25T15:59:31+01:00
     "6fa011a", # 2024-09-07T11:11:40+02:00
+    "935485b", # 2024-09-09T10:39:39+02:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]

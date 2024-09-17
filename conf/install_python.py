@@ -38,12 +38,12 @@ DEFAULT_MAJOR_VERSION = '3.11'
 
 """DocWrite: install_python.md # Install Python Interpreter
 Download Python source code from official Python FTP server:
-DocWriteMacro: manageprojects.tests.docwrite_macros.ftp_url"""
+DocWriteMacro: manageprojects.tests.docwrite_macros_install_python.ftp_url"""
 PY_FTP_INDEX_URL = 'https://www.python.org/ftp/python/'
 
 """DocWrite: install_python.md ## Supported Python Versions
 The following major Python versions are supported and verified with GPG keys:
-DocWriteMacro: manageprojects.tests.docwrite_macros.supported_python_versions
+DocWriteMacro: manageprojects.tests.docwrite_macros_install_python.supported_python_versions
 The GPG keys taken from the official Python download page: https://www.python.org/downloads/"""
 GPG_KEY_IDS = {
     # Thomas Wouters (3.12.x and 3.13.x source files and tags):
@@ -58,7 +58,7 @@ GPG_KEY_SERVER = 'hkps://keys.openpgp.org'
 
 """DocWrite: install_python.md ## Workflow - 3. Check local installed Python
 We assume that the `make altinstall` will install local Python interpreter into:
-DocWriteMacro: manageprojects.tests.docwrite_macros.default_install_prefix
+DocWriteMacro: manageprojects.tests.docwrite_macros_install_python.default_install_prefix
 See: https://docs.python.org/3/using/configure.html#cmdoption-prefix"""
 DEFAULT_INSTALL_PREFIX = '/usr/local'
 
@@ -198,7 +198,7 @@ def install_python(
 
     """DocWrite: install_python.md ## Workflow - 2. Get latest Python release
     We fetch the latest Python release from the Python FTP server, from:
-    DocWriteMacro: manageprojects.tests.docwrite_macros.ftp_url"""
+    DocWriteMacro: manageprojects.tests.docwrite_macros_install_python.ftp_url"""
     # Get latest full version number of Python from Python FTP:
     py_required_version = get_latest_versions(
         html=get_html_page(PY_FTP_INDEX_URL),
@@ -225,7 +225,7 @@ def install_python(
     """DocWrite: install_python.md ## Workflow - 4. Download Python sources
     The download will be done in a temporary directory. The directory will be deleted after the installation.
     This can be skipped via CLI argument. The directory will be prefixed with:
-    DocWriteMacro: manageprojects.tests.docwrite_macros.temp_prefix"""
+    DocWriteMacro: manageprojects.tests.docwrite_macros_install_python.temp_prefix"""
     with TemporaryDirectory(prefix=TEMP_PREFIX, delete=delete_temp) as temp_path:
         base_url = f'{PY_FTP_INDEX_URL}{py_required_version}'
 
@@ -291,7 +291,7 @@ def get_parser() -> argparse.ArgumentParser:
     ```shell
     $ python3 install_python.py --help
 
-    DocWriteMacro: manageprojects.tests.docwrite_macros.help
+    DocWriteMacro: manageprojects.tests.docwrite_macros_install_python.help
     ```
     """
     parser = argparse.ArgumentParser(
@@ -349,6 +349,6 @@ if __name__ == '__main__':
     """DocWrite: install_python.md ## Workflow - 7. print the path
     If no errors occurred, the path to the Python interpreter will be printed to `stdout`.
     So it's usable in shell scripts, like:
-    DocWriteMacro: manageprojects.tests.docwrite_macros.example_shell_script
+    DocWriteMacro: manageprojects.tests.docwrite_macros_install_python.example_shell_script
     """
     print(python_path)
