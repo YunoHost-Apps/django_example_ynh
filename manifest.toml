@@ -101,6 +101,11 @@ ram.runtime = "50M" # **estimate** minimum ram requirement. e.g. 50M, 400M, 1G, 
     # The initial allowed group of user is configured via the init_main_permission question (public=visitors, private=all_users)
     main.url = "/"
 
+    # This configures an additional "admin" permission regarding access to `https://domain.tld/$app/admin`
+    admin.url = "/admin"
+    admin.show_tile = false    # This means that this permission won't correspond to a tile in YunoHost's user portal
+    admin.allowed = "admins"   # Initialize the access for the "admins" group ... You can also use an install question called `init_admin_permission` to let the server admin choose this.
+
     [resources.ports]
     # https://yunohost.org/en/packaging_apps_resources#ports
     # This will pick a random port for reverse-proxying and store it as the $port setting

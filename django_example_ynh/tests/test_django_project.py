@@ -88,6 +88,14 @@ class DjangoYnhTestCase(HtmlAssertionMixin, TestCase):
         #########################################################################################
         # non-HTTPS request should be redirected to HTTPS:
         self.assertIs(settings.SECURE_SSL_REDIRECT, True)
+        response = self.client.get('/', secure=False)
+        self.assertEqual(response.resolver_match.func.view_class, RedirectView)
+        self.assertRedirects(
+            response,
+            status_code=301,  # permanent redirect
+            expected_url='https://testserver/',
+            fetch_redirect_response=False,
+        )
         response = self.client.get('/', secure=True)
         self.assertEqual(response.resolver_match.func.view_class, RedirectView)
         self.assertRedirects(response, expected_url='/app_path/', fetch_redirect_response=False)
@@ -147,6 +155,9 @@ class DjangoYnhTestCase(HtmlAssertionMixin, TestCase):
             secure=True,
         )
         # FIXME: It redirects to the Django Admin login view, but it should redirect to SSOwatLoginRedirectView!
+        # But it's possible to setup via "[resources.permissions]" in manifest.toml
+        # to protect the /admin/ path via SSOwat directly!
+        # In this case the Django Admin login view is never reached!
         self.assertRedirects(
             response,
             expected_url='/app_path/admin/login/?next=/app_path/admin/',
@@ -154,16 +165,6 @@ class DjangoYnhTestCase(HtmlAssertionMixin, TestCase):
         )
 
     def test_auth(self):
-        # SecurityMiddleware should redirects all non-HTTPS requests to HTTPS:
-        self.assertIs(settings.SECURE_SSL_REDIRECT, True)
-        response = self.client.get('/app_path/', secure=False)
-        self.assertRedirects(
-            response,
-            status_code=301,  # permanent redirect
-            expected_url='https://testserver/app_path/',
-            fetch_redirect_response=False,
-        )
-
         with self.assertLogs('django_example') as logs:
             response = self.client.get('/app_path/', secure=True)
             self.assert_html_parts(
