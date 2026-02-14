@@ -4,8 +4,8 @@ It shall NOT be edited by hand.
 -->
 
 <h1>
-  <img src="https://raw.githubusercontent.com/YunoHost/apps/main/logos/django_example.png" width="32px" alt="Logo of Django Example">
-  Django Example, packaged for YunoHost
+  <img src="https://raw.githubusercontent.com/YunoHost/apps/main/logos/django_example.png" width="32px" alt="Logo of Django Unofficial Example">
+  Django Unofficial Example, packaged for YunoHost
 </h1>
 
 Application demonstrating the integration of a Django project under YunoHost
@@ -21,7 +21,7 @@ Application demonstrating the integration of a Django project under YunoHost
 
 [![Automatic tests level](https://apps.yunohost.org/badge/cilevel/django_example)](https://ci-apps.yunohost.org/ci/apps/django_example/)
 
-🛠️ Upstream Django Example repository: <https://github.com/jedie/django-example>
+🛠️ Upstream Django Unofficial Example repository: <https://github.com/jedie/django-example>
 
 Pull request are welcome and should target the [`testing` branch](https://github.com/YunoHost-Apps/django_example_ynh/tree/testing).
 
