@@ -6,7 +6,7 @@ name = "Django Unofficial Example"
 description.en = "Application demonstrating the integration of a Django project under YunoHost"
 description.fr = "Application démontrant l'intégration d'un projet Django sous YunoHost"
 
-version = "0.2.0~ynh6"
+version = "0.2.0~ynh7"
 
 maintainers = ["Jens Diemer"]
 
