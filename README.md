@@ -10,7 +10,7 @@ It shall NOT be edited by hand.
 
 Application demonstrating the integration of a Django project under YunoHost
 
-[![Version: 0.2.0~ynh6](https://img.shields.io/badge/Version-0.2.0~ynh6-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/django_example/)
+[![Version: 0.2.0~ynh7](https://img.shields.io/badge/Version-0.2.0~ynh7-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/django_example/)
 
 <div align="center">
 <a href="https://apps.yunohost.org/app/django_example"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_more_info_on_the_appstore.svg"/></a>
